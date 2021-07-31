@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Les envahisseurs</title>
+		<meta charset="utf-8">
+	</head>
+	
+	<body>
+		<h1>Guerre en terre du millieu</h1>
+		<div id="texte"></div>
+		<button onClick="window.location.reload();" >Relancer</button>
+		
+		<script> 
+			const texte = document.getElementById("texte");
+			
+			function afficher(message){
+				texte.innerHTML += '<p>'+message+'</p>';
+			}
+			
+			function situation(nb_t,c0,c1,c2,c3)
+			{
+				afficher("Tour n° " + nb_t +
+				"<br>Contrée n° 0 " + c0 +
+				"<br>Contrée n° 1 " + c1 +
+				"<br>Contrée n° 2 " + c2 +			
+				"<br>Contrée n° 3 " + c3 );			
+			}
+			
+			function situation_finale(nb_t,c0,c1,c2,c3)
+			{
+				afficher("Fin de la partie" +
+				"<br>Contrée n° 0 " + c0 +
+				"<br>Contrée n° 1 " + c1 +
+				"<br>Contrée n° 2 " + c2 +			
+				"<br>Contrée n° 3 " + c3 );
+			
+			} 
+			
+			function pairouimpair(nb_alea) // génère un nombre aléatoire entre 0 et 9 et détermine si il est pair ou impair
+				{
+					var PoI ='0';						
+				
+					switch(nb_alea)
+					{
+						case 0:
+							PoI ='pair';
+						break;
+						case 2:
+							PoI ='pair';
+						break;
+						case 4:
+							PoI ='pair';
+						break;
+						case 6:
+							PoI ='pair';
+						break;
+						case 8:
+							PoI ='pair';
+						break;
+						default:
+							PoI='impair';
+					}
+					return PoI;
+				}
+				
+				function duel(p1,p2) //détermine le gagnant de l'affrontement orcs ou humains
+				{
+					var nb_alea_j = 0, nb_alea_m = 0,pairoimp_j='0', pairoimp_m='0', resultat = false, vict = 'o';
+					
+					nb_alea_j= Math.floor(Math.random() * 10); // génère un nombre aléatoire entre 0 et 9 pour les joueurs
+					pairoimp_j = pairouimpair(nb_alea_j);// détermine si ce nombre et pair ou impair
+					nb_alea_m = Math.floor(Math.random() * 10);// génère un nombre aléatoire entre 0 et 9 pour la machine
+					pairoimp_m = pairouimpair(nb_alea_m);// détermine si ce nombre et pair ou impair
+	
+					resultat =(pairoimp_j === pairoimp_m)? true : false;// test si les deux variables sont identiques les orcs gagnent sinon ce sont les humains
+
+					vict =(resultat === true)? p1 : p2 ; //stocke le vainqueur 
+
+					return vict;
+				}
+				
+				function attribution_contree(vict,c0,c1,c2,c3,p1,p2)
+				{
+					var attribution = 'xx';
+					
+					if(victoire === p1)
+					{
+						if(c0===c1)
+							{
+								if(c1===c2)
+								{
+									if(c2===c3)
+									{										
+										afficher("la partie devrait être fini");									
+									}	
+									else
+									{
+										attribution = '3o';//les orcs prennent la contrée n°3
+									}
+								}
+								else
+								{
+									attribution = '2o';//les orcs prennent la contrée n°2
+								}								
+							}
+							else
+							{
+								attribution = '1o';//les orcs prennent la contrée n°1
+							}
+					}
+					else
+					{
+						if(victoire === p2)
+						{
+							if(c3===c2)
+							{
+								if(c2===c1)
+								{
+									if(c1===c0)
+									{										
+										afficher("la partie devrait être fini");									
+									}	
+									else
+									{
+										attribution = '0h';//les orcs prennent la contrée n°0
+									}
+								}
+								else
+								{
+									attribution = '1h';//les orcs prennent la contrée n°2
+								}								
+							}
+							else
+							{
+								attribution = '2h';//les orcs prennent la contrée n°1
+							}
+						}
+						else
+						{
+							afficher("la valeur victoire est false");
+						}
+						
+					}
+					
+					return attribution;
+					
+				}
+				
+				function finir(t,c0,c1,c2,c3,p1,p2) // Détermine si l'on arrive en fin de partie //permet de sortir de la boucle
+				{
+					var win = false;
+					
+					if(c0==p1 && c1==p1 && c2==p1 && c3==p1)// si les orcs ont toutes les contrées => victoire => fin de partie
+					{
+						win = true;							
+					}
+					else if(c0==p2 && c1==p2 && c2==p2 && c3==p2)// si les humains ont toutes les contrées => victoire => fin de partie
+					{
+						win = true;
+					}
+					else if(t > 4)// Détermine si l'on arrive en fin de partie //permet de sortir de la boucle
+					{
+						win = true;
+						afficher("fin des tours");
+					}
+					else
+					{
+						win = false;
+					}
+					return win;
+					
+				}
+				
+				function resume(c0,c1,c2,c3,p1,p2)
+				{
+					if((c0==p1 && c1==p1 && c2==p1 && c3==p1) && c0==p1)
+					{
+						afficher("Victoire total pour les orcs");
+					}					
+					else if((c0==p1 && c1==p1 && c2==p1 && c3!=p1) && c0==p1)
+					{
+						afficher("Victoire en faveurs des orcs");
+					}
+					else if((c0==p1 && c1==p1 && c2!=p1 && c3!=p1) && c0==p1)
+					{
+						afficher("Egalité");
+					}
+					else if((c0==p1 && c1!=p1 && c2!=p1 && c3!=p1) && c0==p1)
+					{
+						afficher("Victoire en faveurs le gondor.");
+					}
+					else if((c0!=p1 && c1!=p1 && c2!=p1 && c3!=p1) && c0==p2)
+					{
+						afficher("Victoire total pour le gondor.");
+					}
+					else
+					{
+						afficher("Mais que c'est il passé?");
+					}
+				}
+				
+			var nb_Tour = 0, conquerant1 = 'orcs', conquerant2 = 'Gondor',fin = false, victoire = 'n',att_contree = 'n';
+			var contree0 = conquerant1, contree1 = conquerant1 , contree2 = conquerant2 , contree3 = conquerant2 ;
+			
+			
+			do 	//boucle principal
+			{
+				situation(nb_Tour,contree0,contree1,contree2,contree3); //affiche la situation actuelle
+				
+				nb_Tour++;
+				victoire = duel(conquerant1, conquerant2);
+				att_contree = attribution_contree(victoire,contree0,contree1,contree2,contree3,conquerant1,conquerant2);
+				switch(att_contree)
+				{
+					case '0o':
+					contree0 = conquerant1;
+					break;
+					case '1o':
+					contree1 = conquerant1;
+					break;
+					case '2o':
+					contree2 = conquerant1;
+					break;
+					case '3o':
+					contree3 = conquerant1;
+					break;
+					case '0h':
+					contree0 = conquerant2;
+					break;
+					case '1h':
+					contree1 = conquerant2;
+					break;
+					case '2h':
+					contree2 = conquerant2;
+					break;
+					case '3h':
+					contree3 = conquerant2;
+					break;
+					default:
+					afficher("Erreur attribution contrée");
+				}
+				fin = finir(nb_Tour,contree0,contree1,contree2,contree3,conquerant1,conquerant2);
+			}while(fin!= true)
+			
+			resume(contree0,contree1,contree2,contree3,conquerant1,conquerant2);
+			situation_finale(nb_Tour,contree0,contree1,contree2,contree3); //affiche la final
+			
+			
+		</script>
+	</body>
+</html>
